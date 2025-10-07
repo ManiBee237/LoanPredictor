@@ -1,30 +1,26 @@
+import React from "react";
 export default function DatasetTable({ rows }) {
-  if (!rows?.length) return <div className="text-slate-400">No data loaded.</div>;
+  if (!rows?.length) return <div className="help">No data loaded.</div>;
   return (
-    <div className="overflow-x-auto rounded-xl border border-slate-800">
-      <table className="min-w-full text-sm">
-        <thead className="bg-slate-900 text-slate-300">
+    <div className="table-wrap">
+      <table>
+        <thead>
           <tr>
-            {["Age","Income","LoanAmount","CreditScore","Default"].map(h => (
-              <th key={h} className="px-3 py-2 text-left">{h}</th>
-            ))}
+            {["Age","Income","LoanAmount","CreditScore","Default"].map(h => <th key={h}>{h}</th>)}
           </tr>
         </thead>
         <tbody>
-          {rows.slice(0, 100).map((r, i) => (
-            <tr key={i} className="odd:bg-slate-950 even:bg-slate-900">
-              <td className="px-3 py-2">{r.Age}</td>
-              <td className="px-3 py-2">{r.Income}</td>
-              <td className="px-3 py-2">{r.LoanAmount}</td>
-              <td className="px-3 py-2">{r.CreditScore}</td>
-              <td className="px-3 py-2">{r.Default}</td>
+          {rows.slice(0,100).map((r,i)=>(
+            <tr key={i}>
+              <td>{r.Age}</td>
+              <td>{r.Income}</td>
+              <td>{r.LoanAmount}</td>
+              <td>{r.CreditScore}</td>
+              <td>{r.Default}</td>
             </tr>
           ))}
         </tbody>
       </table>
-      {rows.length > 100 && (
-        <div className="p-2 text-xs text-slate-400">Showing first 100 of {rows.length} rows…</div>
-      )}
     </div>
   );
 }

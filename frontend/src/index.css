@@ -1,1 +1,74 @@
-@import 'tailwindcss';
+@import "tailwindcss";
+
+/* —— Professional Banking/Office UI (light, low-contrast) —— */
+@layer base {
+  :root{
+    --bg:        #F6F8FB;   /* canvas */
+    --surface:   #FFFFFF;   /* cards/panels */
+    --surface-2: #F2F5F9;   /* subtle fills */
+    --border:    #E3E8EF;   /* soft lines */
+    --ink:       #0F172A;   /* primary text */
+    --muted:     #5B6B7C;   /* secondary text */
+
+    /* Brand (soft blue) + a warm accent derived from your palette */
+    --brand:     #2A5B84;
+    --brand-2:   #7FA4C1;
+    --accent:    #D2C1B6;
+  }
+
+  html, body { height: 100%; }
+  body {
+    @apply min-h-screen antialiased;
+    background: var(--bg);
+    color: var(--ink);
+  }
+
+  /* Card primitive */
+  .card {
+    @apply rounded-2xl border p-5 shadow-sm;
+    background: var(--surface);
+    border-color: var(--border);
+  }
+  .card-title { @apply text-sm font-medium; color: var(--muted); }
+
+  /* Quiet buttons */
+  .btn-quiet {
+    @apply inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-sm transition;
+    background: var(--surface);
+    border-color: var(--border);
+  }
+  .btn-quiet:hover { box-shadow: 0 0 0 3px rgba(42,91,132,.08); border-color: #D5DEE8; }
+
+  /* Emphasis (brand) */
+  .btn-brand {
+    @apply inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-white transition shadow-sm;
+    background: var(--brand);
+  }
+  .btn-brand:hover { filter: brightness(0.96); }
+
+  /* Pills */
+  .pill {
+    @apply inline-flex flex-col rounded-xl border px-3 py-2 min-w-28;
+    border-color: var(--border);
+    background: var(--surface);
+  }
+  .pill label { @apply text-[11px]; color: var(--muted); }
+  .pill strong { @apply text-base font-semibold; }
+
+  /* Inputs */
+  .input {
+    @apply w-full rounded-xl border px-3 py-2 text-sm outline-none transition;
+    border-color: var(--border);
+    background: var(--surface);
+  }
+  .input:focus { box-shadow: 0 0 0 3px rgba(42,91,132,.12); border-color: #CAD6E4; }
+
+  /* Soft table */
+  .table-wrap { @apply overflow-x-auto rounded-xl border; border-color: var(--border); background: var(--surface); }
+  table { @apply w-full text-sm; border-collapse: collapse; }
+  thead th { @apply sticky top-0 text-left text-xs font-semibold; background: var(--surface-2); color: var(--muted); }
+  th, td { @apply px-3 py-2 border-b; border-color: var(--border); }
+
+  /* Subtle divider */
+  .divider { @apply h-5 w-px; background: var(--border); }
+}

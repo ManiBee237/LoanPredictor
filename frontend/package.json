@@ -1,18 +1,23 @@
 {
-  "name": "frontend",
-  "version": "0.0.0",
+  "name": "loan-default-frontend",
   "private": true,
-  "dependencies": {
-    "@tailwindcss/vite": "^4.1.14",
-    "@vitejs/plugin-react": "^5.0.4",
-    "react": "...",
-    "react-dom": "...",
-    "tailwindcss": "^4.1.14",
-    "zustand": "..."
-  },
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
+  },
+  "dependencies": {
+    "classnames": "2.5.1",
+    "papaparse": "5.4.1",
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "4.1.14",
+    "@vitejs/plugin-react": "^4.3.4",
+    "tailwindcss": "4.1.14",
+    "vite": "^5.4.9"
   }
 }

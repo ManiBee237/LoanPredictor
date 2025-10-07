@@ -1,7 +1,22 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Card from "../components/Card.jsx";
 import { useApp } from "../store/AppContext.jsx";
-import TechChart from "../components/TechChart.jsx";
+
+/* ——— tiny sparkline (no deps) ——— */
+function Sparkline({ data = [] }) {
+  if (!data.length) return <div className="h-8" />;
+  const max = Math.max(...data, 1);
+  const pts = data.map((v, i) => {
+    const x = (i / (data.length - 1)) * 100;
+    const y = 100 - (v / max) * 100;
+    return `${x},${y}`;
+  }).join(" ");
+  return (
+    <svg viewBox="0 0 100 100" className="h-8 w-full text-[var(--brand)]">
+      <polyline points={pts} fill="none" stroke="currentColor" strokeWidth="3" opacity="0.9" />
+    </svg>
+  );
+}
 
 /* ——— tiny donut (no deps) ——— */
 function Donut({ value = 0, total = 1, size = 140, label = "Rate" }) {
@@ -32,6 +47,7 @@ export default function Reports() {
   const { rows, metrics } = useApp();
   const [api, setApi] = useState({ lastUpdated: null, summary: null, loading: false, error: null });
 
+  /* ——— Local summaries from dataset ——— */
   const summary = useMemo(() => {
     const n = rows.length;
     const defaults = rows.filter(r => Number(r.Default) === 1).length;
@@ -68,10 +84,16 @@ export default function Reports() {
     };
   }, [rows, metrics]);
 
+  /* ——— API wiring (placeholder) ——— */
   useEffect(() => {
     async function loadServerSummary() {
       setApi(s => ({ ...s, loading: true, error: null }));
       try {
+        // const res = await fetch("/api/reports/summary");
+        // const j = await res.json();
+        // setApi({ lastUpdated: new Date().toISOString(), summary: j, loading: false, error: null });
+
+        // mirror local for now
         await new Promise(r=>setTimeout(r, 200));
         setApi({ lastUpdated: new Date().toISOString(), summary: null, loading: false, error: null });
       } catch (e) {
@@ -81,6 +103,7 @@ export default function Reports() {
     loadServerSummary();
   }, [rows, metrics]);
 
+  /* ——— Export helpers ——— */
   const downloadCSV = () => {
     const lines = [
       "metric,value",
@@ -135,14 +158,16 @@ export default function Reports() {
           </div>
         </div>
         <div className="card">
-          <div className="card-title">Avg Credit Score (Last 24)</div>
+          <div className="card-title">Avg Credit Score</div>
           <div className="text-2xl font-semibold">{summary.creditAvg.toFixed(0)}</div>
-          <div className="mt-2"><TechChart data={summary.series.credit} height={130} showArea color="var(--brand)" /></div>
+          <div className="mt-2 text-xs" style={{ color: "var(--muted)" }}>Last 24</div>
+          <Sparkline data={summary.series.credit} />
         </div>
         <div className="card">
-          <div className="card-title">Avg DTI (Last 24)</div>
+          <div className="card-title">Avg DTI</div>
           <div className="text-2xl font-semibold">{summary.dtiAvg.toFixed(2)}</div>
-          <div className="mt-2"><TechChart data={summary.series.dti} height={130} showArea color="var(--accent)" /></div>
+          <div className="mt-2 text-xs" style={{ color: "var(--muted)" }}>Last 24</div>
+          <Sparkline data={summary.series.dti} />
         </div>
       </div>
 
@@ -162,9 +187,9 @@ export default function Reports() {
         </div>
       </Card>
 
-      {/* Defaults Trend */}
+      {/* Trend of Defaults */}
       <Card title="Defaults Trend (rolling 6)">
-        <TechChart data={summary.series.defaultsRolling} height={140} showArea color="var(--brand-2)" />
+        <Sparkline data={summary.series.defaultsRolling} />
         <div className="text-xs mt-2" style={{ color: "var(--muted)" }}>
           Replace with server cohort chart once <code>/api/reports/summary</code> is live.
         </div>
